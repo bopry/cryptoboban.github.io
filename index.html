@@ -103,6 +103,7 @@
 </div>
 <button class="click-button" id="clicker"></button>
 <script>
+  window.Telegram.WebApp.expand()
   let coins = parseInt(localStorage.getItem('coins')) || 0;
   let level = parseInt(localStorage.getItem('level')) || 1;
   let nextLevel = parseInt(localStorage.getItem('nextLevel')) || 10;

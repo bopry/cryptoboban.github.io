@@ -103,6 +103,34 @@
 </div>
 <button class="click-button" id="clicker"></button>
 <script>
+  // Инициализация Telegram Web Apps SDK
+Telegram.WebApp.ready(function() {
+    // Расширение на весь экран
+    Telegram.WebApp.expand();
+
+    // Дополнительная логика, если необходимо
+    const initData = Telegram.WebApp.initData;
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+    const authToken = initDataUnsafe.user.auth_token;
+
+    // Использование токена для взаимодействия с сервером
+    fetch('https://example.com/api/data', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${authToken}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Обработка данных
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+});
+
+  
   window.Telegram.WebApp.expand()
   let coins = parseInt(localStorage.getItem('coins')) || 0;
   let level = parseInt(localStorage.getItem('level')) || 1;

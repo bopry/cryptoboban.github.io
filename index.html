@@ -4,18 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CryptoBobanCoin</title>
-<style>
+<style id="dynamic-styles">
+  /* Стандартные стили, которые будут изменены через JavaScript */
   body {
     position: inherit;
     text-align: center;
     font-family: monospace, sans-serif;
     background-color: #333;
-    background-image: url(ihorbody.jpg);
-    background-size: 100%;
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -30,28 +25,24 @@
   .click-button {
     width: 350px;
     height: 350px;
-    background-image: url(ihor.jpg);
     background-size: 100%;
     border-radius: 50%;
     border: none;
     outline: none;
     cursor: pointer;
     font-size: 24px;
-    color: #fff;
     margin: auto;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
--webkit-tap-highlight-color: transparent;
- transition: 0.04s;
+    -webkit-tap-highlight-color: transparent;
+    transition: 0.04s;
   }
-
   .click-button:active {
       box-shadow: 0px 0px 40px #222;
   }
-
   .score-popup {
     font-size: 2.5rem;
     position: absolute;
@@ -70,24 +61,19 @@
   .progress-bar {
     position: relative;
     width: 100%;
-    background-color: #337;
     height: 0.8rem;
     border-radius: 10px;
   }
   .progress-bar-fill {
-    height: 20px;
-    background-color: #0077ff;
     text-align: center;
-    line-height: 20px;
+    line-height: 0.8rem;
     color: rgba(255, 255, 255, 0);
     height: 0.8rem;
     border-radius: 10px;
   }
-
   p {
     font-size: 1.5rem;
   }
-
 </style>
 </head>
 <body>
@@ -99,21 +85,37 @@
   <p>Уровєнь: <span id="level">1</span></p>
   <p>Нові клікі черіз <span id="timer">60</span> сек</p>
   <p>Осталось <span id="clicks-left">400</span></p>
-
 </div>
 <button class="click-button" id="clicker"></button>
 <script>
   // Инициализация Telegram Web Apps SDK
-Telegram.WebApp.ready(function() {
+  Telegram.WebApp.ready(function() {
     // Расширение на весь экран
     Telegram.WebApp.expand();
+    const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
+    const themeParams = initDataUnsafe.themeParams;
+
+    // Применение цветовой схемы пользователя
+    const dynamicStyles = document.getElementById('dynamic-styles');
+    dynamicStyles.innerHTML = `
+      body {
+        background-color: ${themeParams.bg_color || '#333'};
+        color: ${themeParams.text_color || '#fff'};
+      }
+      .click-button {
+        background-color: ${themeParams.button_color || '#0077ff'};
+        color: ${themeParams.button_text_color || '#fff'};
+      }
+      .progress-bar {
+        background-color: ${themeParams.secondary_bg_color || '#337'};
+      }
+      .progress-bar-fill {
+        background-color: ${themeParams.button_color || '#0077ff'};
+      }
+    `;
 
     // Дополнительная логика, если необходимо
-    const initData = Telegram.WebApp.initData;
-    const initDataUnsafe = Telegram.WebApp.initDataUnsafe;
     const authToken = initDataUnsafe.user.auth_token;
-
-    // Использование токена для взаимодействия с сервером
     fetch('https://example.com/api/data', {
         method: 'GET',
         headers: {
@@ -122,16 +124,13 @@ Telegram.WebApp.ready(function() {
     })
     .then(response => response.json())
     .then(data => {
-        // Обработка данных
         console.log(data);
     })
     .catch(error => {
         console.error('Ошибка:', error);
     });
-});
+  });
 
-  
-  window.Telegram.WebApp.expand()
   let coins = parseInt(localStorage.getItem('coins')) || 0;
   let level = parseInt(localStorage.getItem('level')) || 1;
   let nextLevel = parseInt(localStorage.getItem('nextLevel')) || 10;
